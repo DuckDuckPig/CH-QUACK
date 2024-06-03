@@ -4,8 +4,8 @@
 # seg = acwe(I,m,N,weights,narrowband,plot_progress)
 #
 # Sets up forces for implementation of the active contours without edges (ACWE)
-# algorithm by Chan & Vese [1] or Chan, Sandber & Vese [2].  Calls 
-# level_set_evolve for evolution of the contour.
+# algorithm by Chan & Vese [1].  Calls level_set_evolve for evolution of the
+# contour.
 #
 # Inputs:
 #     I: input image
@@ -14,7 +14,7 @@
 #     weights: vector of weights for different energy terms
 #        [mu,nu,lambda_i,lambda_o] = [surface tension (length), stiffness 
 #                                     (area), inside contour, outside contour]
-#     narrowband: the number of pixels over which to evaluate energies [4]
+#     narrowband: the number of pixels over which to evaluate energies [3]
 #     plot_progress: flag for whether to plot progress each iteration
 #
 # Output:
@@ -25,13 +25,10 @@
 # References:
 # [1] T. F. Chan & L. A. Vese, "Active Contours Without Edges," IEEE 
 #     Transactions on Image Processing, vol. 10, pp. 266-277, 2001.
-# [2] T. F. Chan, B. Y. Sandberg, & L. A. Vese, "Active Contours without Edges
-#     for  Vector-Valued Images," Journal of Visual Communication and Image
-#     Representation, vol. 11, no. 2, pp. 130-141, 2000.
-# [3] H.-K. Zhao, T. Chan, B. Merriman, & S. Osher, "A Variational Level Set
+# [2] H.-K. Zhao, T. Chan, B. Merriman, & S. Osher, "A Variational Level Set
 #     Approach to Multiphase Motion," Journal of Computational Physics, vol. 
 #     127, pp. 179-195, 1996.
-# [4] D. Peng, B. Merriman, S. Osher, H. Zhao, & M. Kang, "A PDE-Based Fast
+# [3] D. Peng, B. Merriman, S. Osher, H. Zhao, & M. Kang, "A PDE-Based Fast
 #     Local Level Set Method," Journal of Computational Physics," vol. 155, 
 #     pp. 410-438, 1999.
 # 
@@ -55,13 +52,11 @@
 # You should have received a copy of the GNU General Public License along with 
 # ACWE.  If not, see <https://www.gnu.org/licenses/>.
 #
-# Updates: Sep 06, 2022: reset phi has been updated to use segmentation
-#                        (seg) for all terms
-#          Sep 18, 2023: Now accepts mulispeciral images (any size) following
-#                        process outlined in [2].
+# Last Update: Sep 06, 2022: reset phi has been updated to use segmentation
+#                            (seg) for all terms.
 
 from scipy.ndimage.morphology import distance_transform_edt
-from numpy import log10, array, sqrt, zeros, max
+from numpy import log10, array, sqrt
 from matplotlib import pyplot as plt
 from scipy.ndimage.filters import convolve
 
@@ -69,21 +64,9 @@ def sobel_gradient(I):
     # define gradient of image using sobel masks
     sx = array([[-1, 0, 1],[-2, 0, 2],[-1, 0, 1]]) # vertical sobel mask
     sy = array([[-1, -2, -1],[0, 0, 0],[1, 2, 1]]) # horizontal sobel mask
-    
-    # Standard (Grayscale) Image
-    if len(I.shape) == 2:
-        gx = convolve(I,sx,mode='reflect')
-        gy = convolve(I,sy,mode='reflect')
-        g = sqrt(gx**2 + gy**2)
-    
-    # Vector-Valued Image
-    else:
-        g = zeros([len(I),len(I[0])])
-        for i in range(array(I.shape)[2]):
-            Imini = I[:,:,i]
-            gx = convolve(Imini,sx,mode='reflect')
-            gy = convolve(Imini,sy,mode='reflect')
-            g = sqrt(gx**2 + gy**2) + g
+    gx = convolve(I,sx,mode='reflect')
+    gy = convolve(I,sy,mode='reflect')
+    g = sqrt(gx**2 + gy**2)
     return g
 
 def level_set_evolve(F,phi,narrowband):
@@ -101,7 +84,7 @@ def acwe(I,m,N,weights,narrowband,plot_progress):
     lambda_i = weights[2] # inside contour weight
     lambda_o = weights[3] # outside contour weight
 
-    # Convert initial mask into signed distance function [3]
+    # Convert initial mask into signed distance function [2]
     # By convention, distance is 0 on contour, <0 outside of contour, and >0
     # inside contour [1]
     # The distance_transform_edt function returns distance to nearest 
@@ -115,24 +98,10 @@ def acwe(I,m,N,weights,narrowband,plot_progress):
     iterate = 1 # flag to keep iterating
     seg = m
     while (counter<N and iterate):
-        
-        # Standard (Grascale) Image
-        if len(I.shape) == 2:
-            m_i = I[seg].mean() # mean of interior
-            m_o = I[~seg].mean() # mean of exterior
-            F_image = -lambda_i*(I[abs(phi)<=narrowband]-m_i)**2 + \
-                +lambda_o*(I[abs(phi)<=narrowband]-m_o)**2 # define image force
-        
-        # Vector-Valued Image [2]
-        else:
-            F_image = 0
-            for i in range(array(I.shape)[2]):
-                Imini = I[:,:,i]
-                m_i = Imini[seg].mean()
-                m_o = Imini[~seg].mean()
-                F_image = -lambda_i[i]*(Imini[abs(phi)<=narrowband]-m_i)**2 + \
-                          +lambda_o[i]*(Imini[abs(phi)<=narrowband]-m_o)**2 + \
-                          F_image
+        m_i = I[seg].mean() # mean of interior
+        m_o = I[~seg].mean() # mean of exterior
+        F_image = -lambda_i*(I[abs(phi)<=narrowband]-m_i)**2 + \
+            +lambda_o*(I[abs(phi)<=narrowband]-m_o)**2 # define image force
         F_length = mu*0
         F_area = nu*0
 
@@ -157,4 +126,5 @@ def acwe(I,m,N,weights,narrowband,plot_progress):
             plt.pause(1)
 
         counter = counter + 1
+        
     return seg

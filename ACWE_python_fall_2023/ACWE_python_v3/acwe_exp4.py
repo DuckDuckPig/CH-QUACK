@@ -72,21 +72,9 @@ def sobel_gradient(I):
     # define gradient of image using sobel masks
     sx = array([[-1, 0, 1],[-2, 0, 2],[-1, 0, 1]]) # vertical sobel mask
     sy = array([[-1, -2, -1],[0, 0, 0],[1, 2, 1]]) # horizontal sobel mask
-    
-    # Standard (Grayscale) Image
-    if len(I.shape) == 2:
-        gx = convolve(I,sx,mode='reflect')
-        gy = convolve(I,sy,mode='reflect')
-        g = sqrt(gx**2 + gy**2)
-    
-    # Vector Valued Image
-    else:
-        g = zeros([len(I),len(I[0])])
-        for i in range(array(I.shape)[2]):
-            Imini = I[:,:,i]
-            gx = convolve(Imini,sx,mode='reflect')
-            gy = convolve(Imini,sy,mode='reflect')
-            g = sqrt(gx**2 + gy**2) + g
+    gx = convolve(I,sx,mode='reflect')
+    gy = convolve(I,sy,mode='reflect')
+    g = sqrt(gx**2 + gy**2)
     return g
 
 def level_set_evolve(F,phi,narrowband):
@@ -168,7 +156,7 @@ def acwe(I,m,N,weights,narrowband,plot_progress):
             segvar = segInt.var()
             segm3  = mean(segInt**3)
             
-            # Estimate new mean, varience, skew, an non-central moment
+            # Estimate new mean, varience, standard devation, and non-central moment
             mz   = (I[abs(phi)<=narrowband] + segm * seglen)/\
                    (seglen + 1)
             varz = (segvar*seglen + (I[abs(phi)<=narrowband]-mz)\
@@ -208,7 +196,7 @@ def acwe(I,m,N,weights,narrowband,plot_progress):
                 segvar = segInt.var()
                 segm3  = mean(segInt**3)
                 
-                # Estimate new mean, varience, skew, an non-central moment
+                # Estimate new mean, varience, standard devation, and non-central moment
                 mz   = (Imini[abs(phi)<=narrowband] + segm * seglen)/\
                        (seglen + 1)
                 varz = (segvar*seglen + (Imini[abs(phi)<=narrowband]-mz)\

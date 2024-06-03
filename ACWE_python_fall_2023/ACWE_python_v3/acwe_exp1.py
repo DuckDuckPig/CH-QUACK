@@ -1,7 +1,5 @@
 #-------------------------------------------------------------------------------
 # Active Contours Without Edges
-#
-# Expeirmental Version 1: Addition of metric for estimating unipoliarity
 # 
 # seg = acwe(I,m,N,weights,narrowband,plot_progress)
 #
@@ -61,7 +59,6 @@
 #                        (seg) for all terms
 #          Sep 18, 2023: Now accepts mulispeciral images (any size) following
 #                        process outlined in [2].
-#          Sep 20, 2023: Image Force Test - Still in progress
 
 from scipy.ndimage.morphology import distance_transform_edt
 from numpy import log10, array, sqrt, zeros, max
@@ -72,21 +69,9 @@ def sobel_gradient(I):
     # define gradient of image using sobel masks
     sx = array([[-1, 0, 1],[-2, 0, 2],[-1, 0, 1]]) # vertical sobel mask
     sy = array([[-1, -2, -1],[0, 0, 0],[1, 2, 1]]) # horizontal sobel mask
-    
-    # Standard (Grayscale) Image
-    if len(I.shape) == 2:
-        gx = convolve(I,sx,mode='reflect')
-        gy = convolve(I,sy,mode='reflect')
-        g = sqrt(gx**2 + gy**2)
-    
-    # Vector Valued Image
-    else:
-        g = zeros([len(I),len(I[0])])
-        for i in range(array(I.shape)[2]):
-            Imini = I[:,:,i]
-            gx = convolve(Imini,sx,mode='reflect')
-            gy = convolve(Imini,sy,mode='reflect')
-            g = sqrt(gx**2 + gy**2) + g
+    gx = convolve(I,sx,mode='reflect')
+    gy = convolve(I,sy,mode='reflect')
+    g = sqrt(gx**2 + gy**2)
     return g
 
 def level_set_evolve(F,phi,narrowband):
@@ -103,7 +88,6 @@ def acwe(I,m,N,weights,narrowband,plot_progress):
     nu = weights[1] # stiffness (area) weight
     lambda_i = weights[2] # inside contour weight
     lambda_o = weights[3] # outside contour weight
-    lambda_u = weights[4] # inside unpolairty weight
 
     # Convert initial mask into signed distance function [3]
     # By convention, distance is 0 on contour, <0 outside of contour, and >0
@@ -120,7 +104,7 @@ def acwe(I,m,N,weights,narrowband,plot_progress):
     seg = m
     while (counter<N and iterate):
         
-        # Standard (Grayscale) Image
+        # Standard (Grascale) Image
         if len(I.shape) == 2:
             m_i = I[seg].mean() # mean of interior
             m_o = I[~seg].mean() # mean of exterior
@@ -128,25 +112,14 @@ def acwe(I,m,N,weights,narrowband,plot_progress):
                 +lambda_o*(I[abs(phi)<=narrowband]-m_o)**2 # define image force
         
         # Vector-Valued Image [2]
-        else: 
+        else:
             F_image = 0
             for i in range(array(I.shape)[2]):
-                
-                # Standard ACWE Image Forces
                 Imini = I[:,:,i]
                 m_i = Imini[seg].mean()
                 m_o = Imini[~seg].mean()
                 F_image = -lambda_i[i]*(Imini[abs(phi)<=narrowband]-m_i)**2 + \
                           +lambda_o[i]*(Imini[abs(phi)<=narrowband]-m_o)**2 + \
-                          F_image
-                          
-                # New Image Forces - Unipolarity Interior
-                segSize = seg.astype(int).sum()
-                mabs    = abs(Imini[seg]).mean() * segSize /  (segSize + 1)
-                mnom    = Imini[seg].mean() * segSize /  (segSize + 1)
-                F_image = lambda_u[i]*(((mabs + abs(Imini[abs(phi)<=narrowband])/(segSize + 1)) - \
-                                        abs(mnom + Imini[abs(phi)<=narrowband]/(segSize + 1))) / \
-                                        (mabs + abs(Imini[abs(phi)<=narrowband])/(segSize + 1))) + \
                           F_image
         F_length = mu*0
         F_area = nu*0
