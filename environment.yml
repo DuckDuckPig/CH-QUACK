@@ -1,4 +1,4 @@
-name: CH_M_ACWE
+name: CH_QUACK
 channels:
   - conda-forge
   - defaults
