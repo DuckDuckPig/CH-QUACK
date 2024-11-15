@@ -2,7 +2,11 @@
 This code develops segmentations of coronal holes (CHs) utilizing solar extreme ultraviolet (EUV) images and magnetogram data taken from the Atmospheric Imager Assembly (AIA) and Heliosismic and Magnetic Imager (HMI) aboard the Solar Dynamics Observatory (SDO). This code is an extension of the Active Contours Without Edges for Coronal Hole (CH-ACWE) segmentation method (the original public release for which can be found at [https://github.com/DuckDuckPig/CH-ACWE](https://github.com/DuckDuckPig/CH-ACWE)) that adds additional forces to gauge the unipolarity of the underlying magnetic field of the identified regions under the expectation that CHs, being regions of open magnetic field, will appear unipolar.
 
 ## Requirements: [environment.yml](environment.yml)
-This updated enviroment file specifies the packages necessary to run this code. It is backwards combatible with [CH-ACWE](https://github.com/DuckDuckPig/CH-ACWE).
+This updated environment file specifies the packages necessary to run this code. It is backwards compatible with [CH-ACWE](https://github.com/DuckDuckPig/CH-ACWE).
+
+## General Notes About This repository
+- Throughout all code/scrips the `Key Variables` cell (usually `In[2]`) will need to be updated to point to the correct directories.
+- The folder `FinalPipeline` is a copy of this repository that only contains the tools for developing a segmentation according to the final EUV+HMI magnetogram segmentation process. Users interested in only the final segmentation process will find a self-contained version of the code, with updated functions to facilitate easier segmetnations there.
 
 ## Downloading the dataset
 The dataset used for this project is identical to the one from [CH-ACWE](https://github.com/DuckDuckPig/CH-ACWE). The code from that repository respoinsible for the download process is reproduced in the the `DatasetTools` folder. The instructions from the [CH-ACWE](https://github.com/DuckDuckPig/CH-ACWE) `README` file are repoduced below:
@@ -27,3 +31,5 @@ The dataset used for this project is identical to the one from [CH-ACWE](https:/
 >     6. Running `RebuildDataset.py` with `traceFolder = 'DownloadLists/'` to download any missing files
 > - `GapCheck.py`: Inform the user as to the largest hour gap between entries in the specified CR within the dataset.
 
+## EUV Single Channel Segmentations
+The folder `EUV_SingleChannel` contains code and tools for comparing the new segmenations and the prior segmentation
