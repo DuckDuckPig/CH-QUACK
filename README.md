@@ -1,5 +1,5 @@
 # CH_QUACK <br> Quantifying Unipolarity via Active Contour Kenetics
-This code develops segmentations of coronal holes (CHs) utilizing solar extreme ultraviolet (EUV) images and magnetogram data taken from the Atmospheric Imager Assembly (AIA) and Heliosismic and Magnetic Imager (HMI) (respectivly) aboard the Solar Dynamics Observatory (SDO). This code is an extension of the Active Contours Without Edges for Coronal Hole (CH-ACWE) segmentation method (the original public release for which can be found at [https://github.com/DuckDuckPig/CH-ACWE](https://github.com/DuckDuckPig/CH-ACWE)) that adds additional forces to quantify the unipolarity of the underlying magnetic field in identified regions under the expectation that CHs, being regions of open magnetic field, will appear unipolar.
+This code develops segmentations of coronal holes (CHs) utilizing solar extreme ultraviolet (EUV) images and magnetogram data taken from the Atmospheric Imager Assembly (AIA) and Heliosismic and Magnetic Imager (HMI) (respectively) aboard the Solar Dynamics Observatory (SDO). This code is an extension of the Active Contours Without Edges for Coronal Hole (CH-ACWE) segmentation method (the original public release for which can be found at [https://github.com/DuckDuckPig/CH-ACWE](https://github.com/DuckDuckPig/CH-ACWE)) that adds additional forces to quantify the unipolarity of the underlying magnetic field in identified regions under the expectation that CHs, being regions of open magnetic field, will appear unipolar.
 
 ## Requirements: [environment.yml](environment.yml)
 This updated environment file specifies the packages necessary to run this code. It is backwards compatible with [CH-ACWE](https://github.com/DuckDuckPig/CH-ACWE).
@@ -30,6 +30,30 @@ The dataset used for this project is identical to the one from [CH-ACWE](https:/
 >     5. Deleting the temporary subfolder
 >     6. Running `RebuildDataset.py` with `traceFolder = 'DownloadLists/'` to download any missing files
 > - `GapCheck.py`: Inform the user as to the largest hour gap between entries in the specified CR within the dataset.
+
+## General Tools
+The folder `ACWE_python_fall_2023` contains updated versions of the functions used to generate segmentations, both with and without HMI magnetogram data, and for saving the resulting segmentations. The following scripts are identical between this code and [CH-ACWE](https://github.com/DuckDuckPig/CH-ACWE), as such the instructions from the [CH-ACWE](https://github.com/DuckDuckPig/CH-ACWE) `README` file are reproduced below:
+
+> - `acweConfidenceMapTools_v3.py`: Tools/functions for combining a segmentation group (collection of segmentations from the same EUV observation) in order to generate a confidence map.
+> - `acweFunctions_v6.py`: Tools/functions for preprocessing an EUV image, generating an initial mask, and running ACWE for both single output/segmentation and for a confidence map. 
+>   - The function `run_acwe` performs all processing and returns the final segmentation and initial mask. 
+>   - The function `run_acwe_confidenceMap` performs all processing and returns the final confidence map as a series of segmentations and initial mask.
+>   - Additional functions are also provided to perform each step separately.
+>   - These functions will work for both AIA and Solar Terrestrial RElations Observatory (STEREO) observations, however a resize parameter of 4 and seeding parameter `alpha` in the range \[0.8,0.9\] are recommended for STEREO data. 
+> - `acweRestoreScale.py`: Tools/functions for resizing a segmentation to match the spatial resolution of the input image.
+>   - Upscale a confidence map using `upscaleConMap`
+>   - Upscale a single segmentation using `upscale` 
+>   - Both functions take in the ACWE header and the segmentation or confidence map and return the same segmentation or confidence map, upscaled to match the resolution of the original EUV image.
+> - `acweSaveSeg_v5.py`: Tools/functions for saving and opening segmentations. 
+>   - The function `saveSeg` takes in the header of the original EUV image, the final segmentation(s), and the list of ACWE parameters. It generates an .npz file which saves the final segmentation with a header outlining the ACWE parameters and a copy of the header for the original EUV image. 
+>   - The function `openSeg` opens and returns the header of the original EUV image, as a dictionary, the header outlining the options used to generate the ACWE segmentation, organized as a dictionary, and the final ACWE segmentation(s).
+>   - Both functions work for both single segmentations and for confidence maps.
+
+In addition to this, the folder `ACWE_python_v3`, which still contains the original ACWE functions, modified to work on python version 3.0 or higher, also includes the following new scripts/versions of ACWE:
+- `acwe_exp1.py`: ACWE for vector-valued images
+- `acwe_exp2.py`: ***The final CH-QUACK evolution function.*** This version has an additional pair of forces that evolve the contour to maximize the unipolarity of the underlying region, as observed in the magnetic field
+- `acwe_exp3.py`: This version has an additional pair of forces that evolve the contour to maximize the flux imbalance of the underlying region, as observed in the magnetic field.
+- `acwe_exp4.py`: This version has an additional pair of forces that evolve the contour to maximize the absolute skew of the underlying region, as observed in the magnetic field.
 
 ## EUV Single Channel Segmentations
 The folder `EUV_SingleChannel` contains code and tools for comparing the new segmentations and the prior segmentation. Within this folder you will find:
