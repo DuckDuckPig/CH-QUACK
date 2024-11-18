@@ -34,7 +34,7 @@ The dataset used for this project is identical to the one from [CH-ACWE](https:/
 ## EUV Single Channel Segmentations
 The folder `EUV_SingleChannel` contains code and tools for comparing the new segmentations and the prior segmentation. Within this folder you will find:
 ### `EUV_SingleChannel/Analysis`
-This folder contains tools for quantifying the segmented regions, from initial seed through final, fully evolved, segmentation, for both EUV-only segmentations and EUV+HMI magnetogram segmetnations.
+This folder contains tools for quantifying various aspects of the segmented regions, from initial seed through final, fully evolved, segmentation, for both EUV-only segmentations and EUV+HMI magnetogram segmetnations.
 - `Expanded Uni on Uni.py`: Calculate the unipolarity of each region from initial seed, through each iteration, until final segmentation for the EUV+HMI magnetogram segmentations.
   - Requires the output of `UniCompair Seed to Segmentation.ipynb`
   - Requires the segmentations from `HMI_Experiments/TestEvolutionMethods/Standard/runACWEdefaltSampleUnipolarity_history.py`
