@@ -57,3 +57,15 @@ This folder contains tools for quantifying various aspects of the segmented regi
 This folder contains a copy of the script `runACWEconfidenceLevelSet_Default.py` from [CH-ACWE](https://github.com/DuckDuckPig/CH-ACWE). The instructions from the [CH-ACWE](https://github.com/DuckDuckPig/CH-ACWE) `README` file are reproduced below:
 > - User will need to adjust the variables in the `Key Variables` cell (`In[2]`) to point to the correct directories and desired EUV wavelength (193 angstroms is the assumed default).
 > - The script will assume that the data are organized by CR, with a sub directory for each record time in the `.csv` file in the `DownloadLists` subfolder within the `DatasetTools` directory. Both `DownloadByRotation.py` and `RebuildDataset.py` will organize the dataset appropriately.
+
+### `EUV_SingleChannel/Scaled`
+This folder contains a copy of the script `runACWEscaledDefault.py` from [CH-ACWE](https://github.com/DuckDuckPig/CH-ACWE). The instructions from the [CH-ACWE](https://github.com/DuckDuckPig/CH-ACWE) `README` file are reproduced below:
+> - [EUV-only] Segmentations generated at any spatial resolution other than 512x512 pixels should be performed using the script `runACWEscaledDefault.py`
+>   - User will need to adjust the variables in the `Key Variables` cell (`In[2]`) to point to the correct directories and desired EUV wavelength (193 angstroms is the assumed default).
+>   - The script will assume that the data are organized by CR, with a sub directory for each record time in the `.csv` file in the `DownloadLists` subfolder within the `DatasetTools` directory. Both `DownloadByRotation.py` and `RebuildDataset.py` will organize the dataset appropriately.
+>   - Under the assumption that the input image is 4096x4096 pixels (the resolution of AIA), if the resize parameter variable `resize_param = 8`, this function will generate a standard [EUV-only] segmentation.
+
+### `EUV_SingleChannel/Standard`
+This folder contains two copies of the standard EUV-only segmentation script from [CH-ACWE](https://github.com/DuckDuckPig/CH-ACWE). The script `runACWEdefault.py` is the unaltered script. The script `runACWEdefault_history.py` is a modified version that saves the output of every single ACWE iteration to facilitate the analysis in `EUV_SingleChannel/Analysis/Expanded Uni.py`. The instructions from the [CH-ACWE](https://github.com/DuckDuckPig/CH-ACWE) `README` file are reproduced below:
+> - User will need to adjust the variables in the `Key Variables` cell (`In[2]`) to point to the correct directories and desired EUV wavelength (193 angstroms is the assumed default).
+> - The script will assume that the data are organized by CR, with a sub directory for each record time in the `.csv` file in the `DownloadLists` subfolder within the `DatasetTools` directory. Both `DownloadByRotation.py` and `RebuildDataset.py` will organize the dataset appropriately.
