@@ -33,6 +33,7 @@ The dataset used for this project is identical to the one from [CH-ACWE](https:/
 
 ## EUV Single Channel Segmentations
 The folder `EUV_SingleChannel` contains code and tools for comparing the new segmentations and the prior segmentation. Within this folder you will find:
+
 ### `EUV_SingleChannel/Analysis`
 This folder contains tools for quantifying various aspects of the segmented regions, from initial seed through final, fully evolved, segmentation, for both EUV-only segmentations and EUV+HMI magnetogram segmentations.
 - `Expanded Uni on Uni.py`: Calculate the unipolarity of each region from initial seed, through each iteration, until final segmentation for the EUV+HMI magnetogram segmentations.
@@ -51,3 +52,8 @@ This folder contains tools for quantifying various aspects of the segmented regi
 - `SeedMapUni.py`: Calculate the unipolarity of the each region in the initial seed
 - `UniCompair Seed to Segmentation.ipynb`: Plot unipolarity of initial seed vs unipolarity of final segmentation for the specified CR
   - Note: Requires the output of both `MapUni.py` and `SeedMapUni.py` for both full-scale and one-eighth-scale segmentations
+
+### `EUV_SingleChannel/ConfidenceMapping`
+This folder contains a copy of the script `runACWEconfidenceLevelSet_Default.py` from [CH-ACWE](https://github.com/DuckDuckPig/CH-ACWE). The instructions from the [CH-ACWE](https://github.com/DuckDuckPig/CH-ACWE) `README` file are reproduced below:
+> - User will need to adjust the variables in the `Key Variables` cell (`In[2]`) to point to the correct directories and desired EUV wavelength (193 angstroms is the assumed default).
+> - The script will assume that the data are organized by CR, with a sub directory for each record time in the `.csv` file in the `DownloadLists` subfolder within the `DatasetTools` directory. Both `DownloadByRotation.py` and `RebuildDataset.py` will organize the dataset appropriately.
