@@ -5,7 +5,10 @@ This code develops segmentations of coronal holes (CHs) utilizing solar extreme 
 This updated environment file specifies the packages necessary to run this code. It is backwards compatible with [CH-ACWE](https://github.com/DuckDuckPig/CH-ACWE).
 
 ## General Notes About This repository
-- Throughout all code/scrips the `Key Variables` cell (usually `In[2]`) will need to be updated to point to the correct directories.
+- Throughout all code the `Key Variables` cell (usually `In[2]`) will need to be updated to point to the correct directories, unless noted below:
+  - None of the tools in the `ACWE_python_fall_2023` folder need to be updated
+  - None of the tools in `Metrics` folder need to be updated
+  - The code `DatasetTools/DataManagmentTools.py` does not need to be updated
 - The folder `FinalPipeline` is a copy of this repository that only contains the tools for developing a segmentation according to the final EUV+HMI magnetogram segmentation process. Users interested in only the final segmentation process will find a self-contained version of the code, with updated functions to facilitate easier segmentations there.
 
 ## Downloading the dataset
