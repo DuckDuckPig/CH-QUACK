@@ -52,7 +52,7 @@ The folder `ACWE_python_fall_2023` contains updated versions of the functions us
 >   - The function `openSeg` opens and returns the header of the original EUV image, as a dictionary, the header outlining the options used to generate the ACWE segmentation, organized as a dictionary, and the final ACWE segmentation(s).
 >   - Both functions work for both single segmentations and for confidence maps.
 
-In addition to this, the folder `ACWE_python_v3`, which still contains the original ACWE functions, modified to work on python version 3.0 or higher, also includes the following new scripts/versions of ACWE:
+In addition to this, the folder `ACWE_python_fall_2023/ACWE_python_v3`, which still contains the original ACWE functions, modified to work on python version 3.0 or higher, also includes the following new scripts/versions of ACWE:
 - `acwe_exp1.py`: ACWE for vector-valued images
 - `acwe_exp2.py`: ***The final CH-QUACK evolution function.*** This version has an additional pair of forces that evolve the contour to maximize the unipolarity of the underlying region, as observed in the magnetic field
 - `acwe_exp3.py`: This version has an additional pair of forces that evolve the contour to maximize the flux imbalance of the underlying region, as observed in the magnetic field.
