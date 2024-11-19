@@ -127,8 +127,6 @@ This folder contains tools for performing full-scale EUV+HMI magnetogram segmetn
 - `Analysis_EUV/visualization-BW.ipynb`: Provides box-and-whisker plots for the the output of `HMI_Experiments/TestEvolutionMethods/Scaled/Analysis_EUV/analizeACWEscaledMagToEUV.py`.
 
 #### Analysis of EUV+HMI Magnetogram Segmentations as a Function of Spatial Resolution
-- `Analysis_HMI/AreaChecks/Empty Segs.ipynb`: Report the names of one-eighth scale ("standard") segmentations that are empty. User will need to update the variables in the `Key Variables` cell (`In[2]`) to match both the correct directories and the image force employed for the HMI magnetogram data.
-- `Analysis_HMI/AreaChecks/Large Area Look.ipynb`: Report and display one-eighth scale ("standard") cases that have a very large area identified as pertaining to a CH. User will need to update the variables in the `Key Variables` cell (`In[2]`) to match both the correct directories and the image force employed for the HMI magnetogram data.
 - `Analysis_HMI/Magnetic Unipolarity Scaling Samples.ipynb`: Display examples of EUV+HMI magnetogram segmetnations at different spatial resolutions. User will need to update the variables in the `Key Variables` cell (`In[2]`) to match both the correct directories and the image force employed for the HMI magnetogram data.
 - `Analysis_HMI/Single CR Lowest IOU Cases with Seed.ipynb`: Display cases where the full-scale EUV+HMI magnetogram segmentations and the one-eighth-scale EUV+HMI magnetogram segmentations differ the most.
   - The variables in the `Key Variables` cell (`In[2]`) will need to be adjusted to point to the correct directories and chosen CR.
@@ -138,3 +136,35 @@ This folder contains tools for performing full-scale EUV+HMI magnetogram segmetn
   - The variables in the `Key Variables` cell (`In[2]`) will need to be adjusted to point to the correct directories and chosen CR.
   - The user will also need to update the `magMethod` variable (also in the `Key Variables` cell) to select the image force employed for the HMI magnetogram data.
 - `Analysis_HMI/visulization_*-BW*.ipynb`: Provides box-and-whisker plots for the the output of `HMI_Experiments/TestEvolutionMethods/Scaled/Analysis_HMI/analizeACWEscaledMag.py`.
+
+### `HMI_Experiments/TestEvolutionMethods/Standard`
+This folder contains tools for generating one-eighth-scale EUV+HMI magnetogram segmentations.
+
+#### Test Evolution with Novel Force:
+- `runACWEdefaultSample*.py`: These four files will generate segmentations using the specified force to guide contour evolution based on the magnetic field data. We note that unipolarity is the final force employed in this work, however, the final implementation includes a prefiltering process that is explored in the `HMI_Experiments/TestSeedingMethods` folder. Across all four scripts, the following notes should be observed:
+  - The variables in the `Key Variables` cell (`In[2]`) will need to be adjusted to point to the correct directories.
+  - As written, these scripts assume that the user will be using the 193 angstroms EUV observation and the HMI magnetogram, however this can be changed to take in any combination of EUV and HMI magnetogram data by adjusting the `acweChoices` variable to list all image(s) chosen for the process.
+    - The size of the foreground, background, and `alpha` weights must be adjusted to match the number of inputs and order chosen
+    - Always list the magnetogram file last
+    - Setting `alpha[i] = -1` will result in the seeding function ignoring channel `i` when seeding. The final seed will be the union of all seeds produced. The channel with the HMI magnetogram should therefore be set to -1.
+  - Like the scripts in [CH-ACWE](https://github.com/DuckDuckPig/CH-ACWE): "The script will assume that the data are organized by CR, with a sub directory for each record time in the `.csv` file in the `DownloadLists` subfolder within the `DatasetTools` directory. Both `DownloadByRotation.py` and `RebuildDataset.py` will organize the dataset appropriately."
+ 
+#### Analysis of EUV+HMI Magnetogram Segmentations as a Function of Spatial Resolution
+- `AreaChecks/Empty Segs.ipynb`: Report the names of one-eighth scale ("standard") segmentations that are empty. User will need to update the variables in the `Key Variables` cell (`In[2]`) to match both the correct directories and the image force employed for the HMI magnetogram data.
+- `AreaChecks/Large Area Look.ipynb`: Report and display one-eighth scale ("standard") cases that have a very large area identified as pertaining to a CH. User will need to update the variables in the `Key Variables` cell (`In[2]`) to match both the correct directories and the image force employed for the HMI magnetogram data.
+
+
+### `HMI_Experiments/TestEvolutionMethods/SeedTransfer`
+Due to the fact that seeding at the reduced one-eighth ('Standard') scale results in the loss of various regions, namely filaments in CR 2133, this code explores the effects of using the full-scale seed image for the one-eighth-scale EUV+HMI magnetogram segmentations to verify that the addition of magnetic field data properly constrains filament evolution even when using spatially decimated magnetogram data.
+
+#### Test Evolution with Novel Force:
+- `MixedSeedingRunUnipolarity.py`: This file takes the seed image produced by `HMI_Experiments/TestEvolutionMethods/Scaled/runACWEscaledSampleHomogenty.py` and uses it to as the seed for a one-eighth-scale EUV+HMI magnetogram segmentation.
+-   - The variables in the `Key Variables` cell (`In[2]`) will need to be adjusted to point to the correct directories.
+  - As written, these scripts assume that the user will be using the 193 angstroms EUV observation and the HMI magnetogram, however this can be changed to take in any combination of EUV and HMI magnetogram data by adjusting the `acweChoices` variable to list all image(s) chosen for the process.
+    - The size of the foreground, background, and `alpha` weights must be adjusted to match the number of inputs and order chosen
+    - Always list the magnetogram file last
+    - Setting `alpha[i] = -1` will result in the seeding function ignoring channel `i` when seeding. The final seed will be the union of all seeds produced. The channel with the HMI magnetogram should therefore be set to -1.
+  - Like the scripts in [CH-ACWE](https://github.com/DuckDuckPig/CH-ACWE): "The script will assume that the data are organized by CR, with a sub directory for each record time in the `.csv` file in the `DownloadLists` subfolder within the `DatasetTools` directory. Both `DownloadByRotation.py` and `RebuildDataset.py` will organize the dataset appropriately."
+  - Requires the output of `HMI_Experiments/TestEvolutionMethods/Scaled/runACWEscaledSampleHomogenty.py`.
+
+#### Analysis of EUV+HMI Magnetogram Segmentations
