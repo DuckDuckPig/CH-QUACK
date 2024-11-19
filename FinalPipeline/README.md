@@ -75,3 +75,6 @@ The file `Standard/runACWEunipolarity.py` Generates a binary CH segmentation acc
   - Setting `alpha[i] = -1` will result in the seeding function ignoring channel `i` when seeding. The final seed will be the union of all seeds produced. The channel with the HMI magnetogram should therefore be set to -1.
 - As written, this code will perform 50 EUV-only iterations of ACWE to enlarge regions of the initial seed in order to filter out filament regions. The number of EUV-only iterations can be changed by adjusting the variable `switch` located in the `Key Variable` cell.
 - Like the scripts in [CH-ACWE](https://github.com/DuckDuckPig/CH-ACWE): "The script will assume that the data are organized by CR, with a sub directory for each record time in the `.csv` file in the `DownloadLists` subfolder within the `DatasetTools` directory. Both `DownloadByRotation.py` and `RebuildDataset.py` will organize the dataset appropriately."
+
+## Additional Tools
+The file `FinalPipeline/Standard/SanityCheck.py` was used to verify that `FinalPipeline/Standard/runACWEunipolarity.py` operates correctly by comparing it to `HMI_Experiments/TestSeedingMethods/runACWEmixProcessUnipolarity.py`
