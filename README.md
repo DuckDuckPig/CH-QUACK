@@ -159,7 +159,7 @@ Due to the fact that seeding at the reduced one-eighth ('Standard') scale result
 
 #### Test Evolution with Novel Force:
 - `MixedSeedingRunUnipolarity.py`: This file takes the seed image produced by `HMI_Experiments/TestEvolutionMethods/Scaled/runACWEscaledSampleHomogenty.py` and uses it to as the seed for a one-eighth-scale EUV+HMI magnetogram segmentation.
--   - The variables in the `Key Variables` cell (`In[2]`) will need to be adjusted to point to the correct directories.
+  - The variables in the `Key Variables` cell (`In[2]`) will need to be adjusted to point to the correct directories.
   - As written, these scripts assume that the user will be using the 193 angstroms EUV observation and the HMI magnetogram, however this can be changed to take in any combination of EUV and HMI magnetogram data by adjusting the `acweChoices` variable to list all image(s) chosen for the process.
     - The size of the foreground, background, and `alpha` weights must be adjusted to match the number of inputs and order chosen
     - Always list the magnetogram file last
@@ -168,3 +168,18 @@ Due to the fact that seeding at the reduced one-eighth ('Standard') scale result
   - Requires the output of `HMI_Experiments/TestEvolutionMethods/Scaled/runACWEscaledSampleHomogenty.py`.
 
 #### Analysis of EUV+HMI Magnetogram Segmentations
+- `Analysis/Single CR Repeat IOU Cases.ipynb`: Display examples of EUV+HMI segmentations, comparing the full-scale and one-eighth-scale evolved (with full-scale seed) examples for the same cases in `HMI_Experiments/TestEvolutionMethods/Scaled/Analysis_EUV/Single CR Lowest IOU Cases.ipynb`
+  - The variables in the `Key Variables` cell (`In[2]`) will need to be adjusted to point to the correct directories and chosen CR.
+  - The user will also need to update the `magMethod` variable (also in the `Key Variables` cell) to select the image force employed for the HMI magnetogram data.
+  - Requires the output of `HMI_Experiments/TestEvolutionMethods/Scaled/Analysis_EUV/analizeACWEscaledMagToEUV.py` for the specified image force and CR.
+- `Analysis/Single CR Samples [0.5,0]-uni Seed Effects.ipynb`: Display examples of EUV+HMI segmentations, comparing the full-scale, one-eighth scale seeding and evolved, and one-eighth-scale evolved (with full-scale seed) examples together.
+  - The variables in the `Key Variables` cell (`In[2]`) will need to be adjusted to point to the correct directories and chosen CR.
+  - Requires the output of `HMI_Experiments/TestEvolutionMethods/Scaled/Analysis_HMI/analizeACWEscaledMag.py` for unipolarity and the specified CR.
+  - Requires the output of `HMI_Experiments/TestEvolutionMethods/SeedTransfer/Analysis/analizeACWEscaledSeedTransferMag.py` for the specified CR.
+- `Analysis/Single CR Samples [0.5,0]-uni.ipynb` and `Analysis/Single CR Seed [0.5,0]-uni.ipynb`: Display cases where the full-scale EUV+HMI magnetogram segmentations and the one-eighth-scale EUV+HMI magnetogram segmentations generated from the same initial seed that differ the most.
+  - The variables in the `Key Variables` cell (`In[2]`) will need to be adjusted to point to the correct directories and chosen CR.
+  - The user will also need to update the `magMethod` variable (also in the `Key Variables` cell) to select the image force employed for the HMI magnetogram data.
+  - Requires the output of `HMI_Experiments/TestEvolutionMethods/SeedTransfer/Analysis/analizeACWEscaledSeedTransferMag.py` for the specified CR.
+- `Analysis/analizeACWEscaledSeedTransferMag.py.py`: Compare the full-scale EUV+HMI magnetogram segmentations with the one-eighth-scale EUV+HMI magnetogram segmentations generated using the same initial seed.
+  - The variables in the `Key Variables` cell (`In[2]`) will need to be adjusted to point to the correct directories and chosen CR.
+- `Analysis/visulization_*-BW*.ipynb`: Provides box-and-whisker plots for the the output of `HMI_Experiments/TestEvolutionMethods/SeedTransfer/Analysis/analizeACWEscaledSeedTransferMag.py`.
