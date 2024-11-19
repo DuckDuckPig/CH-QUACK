@@ -5,7 +5,7 @@ This code develops segmentations of coronal holes (CHs) utilizing solar extreme 
 This updated environment file specifies the packages necessary to run this code. It is backwards compatible with [CH-ACWE](https://github.com/DuckDuckPig/CH-ACWE).
 
 ## General Notes About This repository
-- In every python (`.py`) or jupyter notebook (`ipynb`) file the `Key Variables` cell (usually `In[2]`) will need to be updated to point to the correct directories, unless noted below:
+- In every python (`.py`) or jupyter notebook (`.ipynb`) file the `Key Variables` cell (usually `In[2]`) will need to be updated to point to the correct directories, unless noted below:
   - None of the tools in the `ACWE_python_fall_2023` folder need to be updated
   - None of the tools in `Metrics` folder need to be updated
   - The code `DatasetTools/DataManagmentTools.py` does not need to be updated# CH_QUACK <br> Quantifying Unipolarity via Active Contour Kenetics
