@@ -1,0 +1,21 @@
+name: CH_QUACK
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - python=3.10.10
+  - numpy=1.23.5
+  - scipy=1.10.1
+  - sunpy=4.1.4
+  - scikit-image=0.20.0
+  - matplotlib=3.7.1
+  - astropy=5.2.2
+  - pandas=2.0.0
+  - aiapy=0.7.3
+  - imageio=2.27.0
+  - reproject=0.10.0
+  - notebook=6.5.4
+  - ipywidgets=8.0.6
+  - drms=0.6.3
+  - glob2=0.7
+  - pip=23.0.1
