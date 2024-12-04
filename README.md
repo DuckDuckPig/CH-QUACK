@@ -71,7 +71,7 @@ This folder contains tools for quantifying various aspects of the segmented regi
   - Requires the output of `UniCompair Seed to Segmentation.ipynb`
   - Requires the segmentations from `EUV_SingleChannel/Standard/runACWEdefault_history.py`
   - The `Key Variables` cell is labeled `In[1b]`
-- `Find Samples.ipynb`: Plot the unipolarity of individual regions from initial seed to final segmetation as a function of iteration
+- `Find Samples.ipynb`: Plot the unipolarity of individual regions from initial seed to final segmentation as a function of iteration
   - Requires the output of `Expanded Uni`
   - Requires the output of `Expanded Uni on Uni.py`
 - `MapUni.py`: Calculate the unipolarity of each region in the final segmentation
@@ -101,7 +101,7 @@ This folder contains two copies of the standard EUV-only segmentation script fro
 The folder `HMI_Experiments` contains code for evaluating the effects of incorporating various metrics for constraining CH evolution based on the characteristics of the underlying magnetic field both during the evolution of the region, and in the initial seeding of the CH regions.
 
 ### `HMI_Experiments/TestEvolutionMethods/Scaled`
-This folder contains tools for performing full-scale EUV+HMI magnetogram segmetnations, with additional tools for comparing segmetnations to the full-scale EUV-only segmentations of [CH-ACWE](https://github.com/DuckDuckPig/CH-ACWE), and to one-eighth-scale EUV+HMI magnetogram segmentations.
+This folder contains tools for performing full-scale EUV+HMI magnetogram segmentations, with additional tools for comparing segmentations to the full-scale EUV-only segmentations of [CH-ACWE](https://github.com/DuckDuckPig/CH-ACWE), and to one-eighth-scale EUV+HMI magnetogram segmentations.
 
 #### Test Evolution with Novel Force:
 - `runACWEscaledSample*.py`: These four files will generate segmentations using the specified force to guide contour evolution based on the magnetic field data. We note that unipolarity is the final force employed in this work, however, the final implementation includes a prefiltering process that is explored in the `HMI_Experiments/TestSeedingMethods` folder. Across all four scripts, the following notes should be observed:
@@ -116,7 +116,7 @@ This folder contains tools for performing full-scale EUV+HMI magnetogram segmetn
 #### Analysis Compared to EUV-Only Segmentations
 - `Analysis_EUV/AreaChecks/Empty Segs.ipynb`: Report the names of segmentations that are empty. User will need to update the variables in the `Key Variables` cell (`In[2]`) to match both the correct directories and the image force employed for the HMI magnetogram data.
 - `Analysis_EUV/AreaChecks/Large Area Look.ipynb`: Report and display cases that have a very large area identified as pertaining to a CH. User will need to update the variables in the `Key Variables` cell (`In[2]`) to match both the correct directories and the image force employed for the HMI magnetogram data.
-- `Analysis_EUV/Single CR Lowest IOU Cases-SameSet.ipynb` and `Analysis_EUV/Single CR Lowest IOU Cases.ipynb`: Display the cases where the full-scale EUV-only and full-scale EUV+HMI magnetogram segmetnations differ the most.
+- `Analysis_EUV/Single CR Lowest IOU Cases-SameSet.ipynb` and `Analysis_EUV/Single CR Lowest IOU Cases.ipynb`: Display the cases where the full-scale EUV-only and full-scale EUV+HMI magnetogram segmentations differ the most.
   - The variables in the `Key Variables` cell (`In[2]`) will need to be adjusted to point to the correct directories and chosen CR.
   - The user will also need to update the `magMethod` variable (also in the `Key Variables` cell) to select the image force employed for the HMI magnetogram data.
   - In `Analysis_EUV/Single CR Lowest IOU Cases-SameSet.ipynb`, the variable `compMethod` allows the user to view the same cases automatically chosen for a different image force, in order to allow for an direct comparison.
@@ -127,7 +127,7 @@ This folder contains tools for performing full-scale EUV+HMI magnetogram segmetn
 - `Analysis_EUV/visualization-BW.ipynb`: Provides box-and-whisker plots for the the output of `HMI_Experiments/TestEvolutionMethods/Scaled/Analysis_EUV/analizeACWEscaledMagToEUV.py`.
 
 #### Analysis of EUV+HMI Magnetogram Segmentations as a Function of Spatial Resolution
-- `Analysis_HMI/Magnetic Unipolarity Scaling Samples.ipynb`: Display examples of EUV+HMI magnetogram segmetnations at different spatial resolutions. User will need to update the variables in the `Key Variables` cell (`In[2]`) to match both the correct directories and the image force employed for the HMI magnetogram data.
+- `Analysis_HMI/Magnetic Unipolarity Scaling Samples.ipynb`: Display examples of EUV+HMI magnetogram segmentations at different spatial resolutions. User will need to update the variables in the `Key Variables` cell (`In[2]`) to match both the correct directories and the image force employed for the HMI magnetogram data.
 - `Analysis_HMI/Single CR Lowest IOU Cases with Seed.ipynb`: Display cases where the full-scale EUV+HMI magnetogram segmentations and the one-eighth-scale EUV+HMI magnetogram segmentations differ the most.
   - The variables in the `Key Variables` cell (`In[2]`) will need to be adjusted to point to the correct directories and chosen CR.
   - The user will also need to update the `magMethod` variable (also in the `Key Variables` cell) to select the image force employed for the HMI magnetogram data.
