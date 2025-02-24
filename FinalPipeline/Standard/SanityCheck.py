@@ -31,7 +31,7 @@ dataFolder2 = mainFolder + 'HMI_Experiments/TestSeedingMethods/Standard/Uni/CR21
 # In[3]
 # Get List of images
 
-dataset1 = sorted(glob.glob(dataFolder1 + '*/ACWE.*.npz'))
+dataset1 = sorted(glob.glob(dataFolder1 + '*/QUACK.*.npz'))
 dataset2 = sorted(glob.glob(dataFolder2 + '*/ACWE.*.npz'))
 
 # In[4]

@@ -33,7 +33,7 @@ saveFolder = '/mnt/coronal_holes/Paper 2/Code 02 Observations'
 saveFolder = saveFolder + '/FinalPipeline/Standard/Uni/'
 
 # ACWE Prefix
-acwePrefix = 'ACWE.' # Prefix for ACWE
+acwePrefix = 'QUACK.' # Prefix for ACWE
 overwrite = False    # If True run from begining 
 
 # ACWE Parameters 
