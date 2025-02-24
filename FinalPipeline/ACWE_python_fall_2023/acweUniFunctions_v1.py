@@ -11,6 +11,7 @@ Edited on  Thu Apr  1 14:25:54 2021 - Adjusted for STEREO A and B
            Mon Feb 20 14:42:47 2023 - Condenced to tools used in paper, with 
                                       aditinal documentation
            Wed Oct 23 09:04:35 2024 - Vector Valued Functions with Unipolarity
+           Fri Feb 21 13:45:49 2025 - Updated Documentation
 
 @author: jgra
 """
