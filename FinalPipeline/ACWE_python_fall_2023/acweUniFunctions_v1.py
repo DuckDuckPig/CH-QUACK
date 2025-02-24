@@ -410,7 +410,11 @@ def itterate_acwe(I,im_size,sd_mask,m,foreground_weight=1,
                   fillInitHoles=True,verbose=False):
     '''
     Runs coronal hole (CH) segmentation using active contours without edges 
-    (ACWE) as described in [1].
+    (ACWE) as described in [1]. This version is capable of Quantifying 
+    Unipolarity via Active Contour Kinetics (QUACK), generating a single 
+    segmentation based on the two goals of maximizing unipolarity and 
+    maximizing homogeneity of both the foreground and background as expressed 
+    in one or more channels of a vector-valued image.
     
     Parameters
     ----------
@@ -567,7 +571,11 @@ def run_acwe(J,h,files,resize_param=8,foreground_weight=1,background_weight=1/50
     
     '''
     Primary function for running coronal hole (CH) segmentation using active 
-    contours without edges (ACWE)
+    contours without edges (ACWE). This version is capable of Quantifying 
+    Unipolarity via Active Contour Kinetics (QUACK), generating a single 
+    segmentation based on the two goals of maximizing unipolarity and 
+    maximizing homogeneity of both the foreground and background as expressed 
+    in one or more channels of a vector-valued image.
     
     Parameters
     ----------
@@ -582,18 +590,28 @@ def run_acwe(J,h,files,resize_param=8,foreground_weight=1,background_weight=1/50
         resize_param = np.min(np.asarray(J.shape)/np.array([512,512])).astype(int)
         
         Default Value: 8
-    foreground_weight : float, optional
+    foreground_weight : float or [float], optional
         Weight term for the foreground (CH) homogeneity within the energy 
         functional. It is recommended that this value be kept at 1 to
         facilitate an intuitive understanding of the relative strength of 
-        the backround_weight to forground_weight.
+        the backround_weight compared to forground_weight.
         
         Default Value: 1
-    background_weight : float, optional
-        Weight term for the background (quiet Sun and all remaining on disk
+    background_weight : float or [float], optional
+        Weight term for the background (quiet Sun and all remaining on-disk
         features) homogeneity within the energy functional.
         
         Default Value: 1/50.0
+    unipolarity_foreground_weight : float or [float], optional
+        Weight term for the foreground (CH) unipolarity within the energy
+        functional.
+        
+        Default Value: 1
+    unipolarity_background_weight : float or [float], optional
+        weight term for the bacground (quiet Sun and all remaining on-disk
+        features) unipolarity within the energy functional.
+        
+        Default Value: 1/50.
     alpha : float, optional
         Threshold parameter alpha will be multiplied by mean quiet sun 
         intensity to generate the threshold for the initial mask.
@@ -608,10 +626,56 @@ def run_acwe(J,h,files,resize_param=8,foreground_weight=1,background_weight=1/50
         Number of iterations of ACWE between checks for convergence.
         
         Default Value: 10
+    prefilter_foreground_weight : float or [float], optional
+        Weight term for the foreground (CH) homogeneity within the energy 
+        functional. It is recommended that this value be kept at 1 to
+        facilitate an intuitive understanding of the relative strength of 
+        the backround_weight compared to forground_weight.
+        
+        Default Value: 1
+    prefilter_background_weight : float or [float], optional
+        Weight term for the background (quiet Sun and all remaining on-disk
+        features) homogeneity within the energy functional.
+        
+        Default Value: 1/50.0
     verbose : bool, optional
         Display ACWE evolution in real time.
         
         Default Value: False
+    prefilter_unipolarity_foreground_weight : float or [float], optional
+        Weight term for the foreground (CH) unipolarity within the energy
+        functional. We note that for seed prefiltering ALL 
+        unipolarity_forground_weight values should, ideally, be 0,
+        but provide the user the option should they wish to try other values.
+        
+        Defalut Value: 0
+    prefilter_unipolarity_background_weight : float or [float], optional
+        weight term for the bacground (quiet Sun and all remaining on-disk
+        features) unipolarity within the energy functional. We note that for 
+        seed prefiltering ALL unipolarity_background_weight values should, 
+        ideally, be 0,but provide the user the option should they wish to try 
+        other values.
+        
+        Default Value : 0
+    minItter : int, optional
+        Minimum number of itterations to perform before prefiltering the seed.
+        We note that the true number of itterations will be 
+        N * np.ceil(minItter/N) times.
+        
+        Default Value: 50
+    strell : int, optional
+        Size of structuring element used to group regions when pre-filtering
+        intial seed. For consistanty, this strell should be 5 for a 512x512 
+        pixel image, and 10 for a 1024x1024 pixel image, and 40 for a 4096x4096
+        pixel image.
+        
+        Default Value: 5
+    uniCap : float, optional
+        Maximum line-of-sight unipolarity of region, using equation described
+        in [2], in a seed region, after eveovling for N * ceil(minItter/N)
+        itterations. All seeds with a value > unicap will be removed.
+        
+        Default Value: 0.80
     correctLimbBrightening : bool, optional
         Perform limb brightening correction of [2]. Note, process is not 
         recommended on STEREO images.
@@ -768,7 +832,12 @@ def run_acwe_confidence_map(J,h,files,resize_param=8,foreground_weights=[1],
     
     '''
     Primary function for running coronal hole (CH) segmentation using active 
-    contours without edges (ACWE)
+    contours without edges (ACWE) in order to generate confidence maps. This 
+    version is capable of Quantifying Unipolarity via Active Contour 
+    Kinetics (QUACK), generating segmentations based on the two goals of 
+    maximizing unipolarity and maximizing homogeneity of both the foreground 
+    and background as expressed in one or more channels of a vector-valued 
+    image.
     
     Parameters
     ----------
@@ -783,18 +852,28 @@ def run_acwe_confidence_map(J,h,files,resize_param=8,foreground_weights=[1],
         resize_param = np.min(np.asarray(J.shape)/np.array([512,512])).astype(int)
         
         Default Value: 8
-    foreground_weight : float, optional
+    foreground_weights : [float], optional
         Weight term for the foreground (CH) homogeneity within the energy 
         functional. It is recommended that this value be kept at 1 to
         facilitate an intuitive understanding of the relative strength of 
-        the backround_weight to forground_weight.
+        the backround_weight compared to forground_weight.
         
-        Default Value: 1
-    background_weight : float, optional
-        Weight term for the background (quiet Sun and all remaining on disk
+        Default Value: [1]
+    background_weights : [float], optional
+        Weight term for the background (quiet Sun and all remaining on-disk
         features) homogeneity within the energy functional.
         
-        Default Value: 1/50.0
+        Default Value: [1/50.0]
+    unipolarity_foreground_weights : [float], optional
+        Weight term for the foreground (CH) unipolarity within the energy
+        functional.
+        
+        Default Value: [1]
+    unipolarity_background_weights : [float], optional
+        weight term for the bacground (quiet Sun and all remaining on-disk
+        features) unipolarity within the energy functional.
+        
+        Default Value: [1/50.0]
     alpha : float, optional
         Threshold parameter alpha will be multiplied by mean quiet sun 
         intensity to generate the threshold for the initial mask.
@@ -809,10 +888,56 @@ def run_acwe_confidence_map(J,h,files,resize_param=8,foreground_weights=[1],
         Number of iterations of ACWE between checks for convergence.
         
         Default Value: 10
+    prefilter_foreground_weight : float or [float], optional
+        Weight term for the foreground (CH) homogeneity within the energy 
+        functional. It is recommended that this value be kept at 1 to
+        facilitate an intuitive understanding of the relative strength of 
+        the backround_weight compared to forground_weight.
+        
+        Default Value: 1
+    prefilter_background_weight : float or [float], optional
+        Weight term for the background (quiet Sun and all remaining on-disk
+        features) homogeneity within the energy functional.
+        
+        Default Value: 1/50.0
     verbose : bool, optional
         Display ACWE evolution in real time.
         
         Default Value: False
+    prefilter_unipolarity_foreground_weight : float or [float], optional
+        Weight term for the foreground (CH) unipolarity within the energy
+        functional. We note that for seed prefiltering ALL 
+        unipolarity_forground_weight values should, ideally, be 0,
+        but provide the user the option should they wish to try other values.
+        
+        Defalut Value: 0
+    prefilter_unipolarity_background_weight : float or [float], optional
+        weight term for the bacground (quiet Sun and all remaining on-disk
+        features) unipolarity within the energy functional. We note that for 
+        seed prefiltering ALL unipolarity_background_weight values should, 
+        ideally, be 0,but provide the user the option should they wish to try 
+        other values.
+        
+        Default Value : 0
+    minItter : int, optional
+        Minimum number of itterations to perform before prefiltering the seed.
+        We note that the true number of itterations will be 
+        N * np.ceil(minItter/N) times.
+        
+        Default Value: 50
+    strell : int, optional
+        Size of structuring element used to group regions when pre-filtering
+        intial seed. For consistanty, this strell should be 5 for a 512x512 
+        pixel image, and 10 for a 1024x1024 pixel image, and 40 for a 4096x4096
+        pixel image.
+        
+        Default Value: 5
+    uniCap : float, optional
+        Maximum line-of-sight unipolarity of region, using equation described
+        in [2], in a seed region, after eveovling for N * ceil(minItter/N)
+        itterations. All seeds with a value > unicap will be removed.
+        
+        Default Value: 0.80
     correctLimbBrightening : bool, optional
         Perform limb brightening correction of [2]. Note, process is not 
         recommended on STEREO images.
