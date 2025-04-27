@@ -295,7 +295,7 @@ for i in range(len(data[keys[acweChoices[0]]])): # range(len(data[keys[acweChoic
                 Itmp[np.isnan(Itmp)] = np.nanmin(Itmp)
             # Remaining EUVs
             else:
-                Itmp,_,H = openAIA(dataFolder+str(CR) +'/'+files[j])
+                Itmp,_,Htmp = openAIA(dataFolder+str(CR) +'/'+files[j])
             # Save
             I[:,:,j] = Itmp
             H.append(Htmp)
