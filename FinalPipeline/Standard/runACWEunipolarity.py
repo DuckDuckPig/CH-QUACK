@@ -11,6 +11,7 @@ import os
 import sys
 import numpy as np
 import pandas as pd
+import copy
 
 # Root directory of the project
 ROOT_DIR = os.path.abspath("../")
@@ -128,7 +129,7 @@ for i in range(len(data[keys[acweChoices[0]]])): #range(len(data[keys[acweChoice
         Itmp,_,Htmp = read_fits.openAIA(dataFolder+str(CR) +'/'+files[0])
         Ishape   = np.hstack([Itmp.shape,len(files)])
         I = np.zeros(Ishape); I[:,:,0] = Itmp
-        H = [];               H.append(Htmp)
+        H = {};               H[0] = copy.deepcopy(Htmp)
         
         # Open Rest
         for j in range(1,len(files)):
@@ -139,10 +140,10 @@ for i in range(len(data[keys[acweChoices[0]]])): #range(len(data[keys[acweChoice
                 Itmp[np.isnan(Itmp)] = np.nanmin(Itmp)
             # Remaining EUVs
             else:
-                Itmp,_,H = read_fits.openAIA(dataFolder+str(CR) +'/'+files[j])
+                Itmp,_,Htmp = read_fits.openAIA(dataFolder+str(CR) +'/'+files[j])
             # Save
             I[:,:,j] = Itmp
-            H.append(Htmp)
+            H[j] = copy.deepcopy(Htmp)
         
         # Inform user
         if verbose:
