@@ -12,8 +12,9 @@ This updated environment file specifies the packages necessary to run this code.
   - None of the tools in `SDO_tools` folder need to be updated
 - The version of this code that you are seeing here is taken from the folder `FinalPipeline`. This version of the repository only contains the tools needed to develop a segmentation according to the final EUV+HMI magnetogram segmentation process. Users interested in all code related to CH_QUACK may visit [https://github.com/DuckDuckPig/CH-QUACK](https://github.com/DuckDuckPig/CH-QUACK) for the complete repository.
 
-## Downloading the dataset
-The dataset used for this project is identical to the one from [CH-ACWE](https://github.com/DuckDuckPig/CH-ACWE). The code from that repository responsible for the download process is reproduced in the the `DatasetTools` folder. The instructions from the [CH-ACWE](https://github.com/DuckDuckPig/CH-ACWE) `README` file are reproduced below:
+## Downloading the datasets
+### Primary Dataset
+The primary dataset used for this project is identical to the one from [CH-ACWE](https://github.com/DuckDuckPig/CH-ACWE). The code from that repository responsible for the download process is reproduced in the the `DatasetTools` folder. The instructions from the [CH-ACWE](https://github.com/DuckDuckPig/CH-ACWE) `README` file are reproduced below:
 
 > - `DownloadLists`: This folder contains an organized lists of the dataset. These lists are organized into four `.csv` files, one for each Carrington Rotation (CR).
 > - `Carrington Rotation Start Dates.csv`: This file is a list of the start dates for each Carrington Rotation from CR -10 through CR 2300. This file is used by `DownloadByRotation.py` for both downloading and organizing the dataset.
@@ -33,7 +34,28 @@ The dataset used for this project is identical to the one from [CH-ACWE](https:/
 >     4. Running `DownloadByRotation.py`
 >     5. Deleting the temporary subfolder
 >     6. Running `RebuildDataset.py` with `traceFolder = 'DownloadLists/'` to download any missing files
-> - `GapCheck.py`: Inform the user as to the largest hour gap between entries in the specified CR within the dataset.
+
+### Other Datasets
+In addition to this primary dataset, two additional dataset were used with this final piepline for method validation. The first validation dataset is the community datset from [Reiss et al. (2024)](https://doi.org/10.3847/1538-4365/ad1408). It can be accessed through the links provided in Section 3, Section 5.1, or Section 5.3 (all the same link) in that paper.
+
+The second validation dataset consists of a daily cadence dataset devloped for this work. This dataset includes observtions starting with CR 2099 and ending with CR 2294. The file `DownloadAtCadence.py` was used to create this dataset. Like with `DownloadByRotation.py`:
+> - User will need to adjust the variables in the `Key Variables` cell (`In[2]`) to point to the correct directories.
+> - User will need to register their email at [http://jsoc.stanford.edu/ajax/register_email.html](http://jsoc.stanford.edu/ajax/register_email.html) and add that email to the appropriate variable in the `Key Variables` cell.
+> - This script can be used to speed up the process of rebuilding the dataset. This is achieved by
+>   1. Creating a temporary subfolder within the `DatasetTools` folder
+>   2. Ensuring that the variable `traceFolder` points to that temporary subfolder
+>   3. Setting the remaining variables in the `Key Variables` cell to ensure the correct CR is downloaded and saved where the user wishes
+>   4. Running `DownloadByRotation.py`
+>   5. Deleting the temporary subfolder
+>   6. Running `RebuildDataset.py`...to download any missing files
+
+Please note: in order to use `RebuildDataset.py` to rebuild the daily cadence dataset the following lines must be changed:
+- Line 32: Replace `traceFolder = 'DownloadLists/'`  with `traceFolder = 'DailyCadenceDownloadLists/'`.
+- Line 67: Replace `    for key in keys[2:]:` with `    for key in keys[3:]:`.
+
+We note here that the following code has been added to validate the datasets:
+- `GapCheck2.py` reports the largest temporal gap that exits between observations. This new formulation will cycle through all CRs in the dataset, reporting the largest gap in each CR.
+- `HMIgap.py` report the largest time gap that exits between the HMI observation and the AIA data it has been paired with. Like with `GapCheck2.py`, this code will cycle thorugh all CRs in the dataset, reporting the largest temporal gap in each CR.
 
 ## General Tools
 The folder `ACWE_python_fall_2023` contains updated versions of the functions used to generate segmentations, both with and without HMI magnetogram data, and for saving the resulting segmentations. The following scripts are identical between this code and [CH-ACWE](https://github.com/DuckDuckPig/CH-ACWE), as such the instructions from the [CH-ACWE](https://github.com/DuckDuckPig/CH-ACWE) `README` file are reproduced below:
@@ -75,6 +97,10 @@ The file `Standard/runACWEunipolarity.py` Generates a binary CH segmentation acc
   - Setting `alpha[i] = -1` will result in the seeding function ignoring channel `i` when seeding. The final seed will be the union of all seeds produced. The channel with the HMI magnetogram should therefore be set to -1.
 - As written, this code will perform 50 EUV-only iterations of ACWE to enlarge regions of the initial seed in order to filter out filament regions. The number of EUV-only iterations can be changed by adjusting the variable `switch` located in the `Key Variable` cell.
 - Like the scripts in [CH-ACWE](https://github.com/DuckDuckPig/CH-ACWE): "The script will assume that the data are organized by CR, with a sub directory for each record time in the `.csv` file in the `DownloadLists` subfolder within the `DatasetTools` directory. Both `DownloadByRotation.py` and `RebuildDataset.py` will organize the dataset appropriately."
+
+The file `Extensions/ISWAT/Standard/runACWEunipolarityISWAT.py` is a version of `Standard/runACWEunipolarity.py` that has been modified to accpet the preprocessed `.save` files provide by [Reiss et al. (2024)](https://doi.org/10.3847/1538-4365/ad1408). Please note:
+- The variables in the `Key Variables` cell (`In[2]`) will need to be adjusted to point to the correct directories.
+- As written, this code will perform 50 EUV-only iterations of ACWE to enlarge regions of the initial seed in order to filter out filament regions. The number of EUV-only iterations can be changed by adjusting the variable `switch` located in the `Key Variable` cell.
 
 ## Additional Tools
 The file `FinalPipeline/Standard/SanityCheck.py` was used to verify that `FinalPipeline/Standard/runACWEunipolarity.py` operates correctly by comparing it to `HMI_Experiments/TestSeedingMethods/runACWEmixProcessUnipolarity.py`
