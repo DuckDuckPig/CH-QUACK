@@ -36,26 +36,28 @@ The primary dataset used for this project is identical to the one from [CH-ACWE]
 >     6. Running `RebuildDataset.py` with `traceFolder = 'DownloadLists/'` to download any missing files
 
 ### Other Datasets
-In addition to this primary dataset, two additional dataset were used with this final piepline for method validation. The first validation dataset is the community datset from [Reiss et al. (2024)](https://doi.org/10.3847/1538-4365/ad1408). It can be accessed through the links provided in Section 3, Section 5.1, or Section 5.3 (all the same link) in that paper.
+In addition to this primary dataset, two additional dataset were used with this final pipeline for method validation. The first validation dataset is the community dataset from [Reiss et al. (2024)](https://doi.org/10.3847/1538-4365/ad1408). It can be accessed through the links provided in Section 3, Section 5.1, or Section 5.3 (all the same link) in that paper.
 
-The second validation dataset consists of a daily cadence dataset devloped for this work. This dataset includes observtions starting with CR 2099 and ending with CR 2294. The file `DownloadAtCadence.py` was used to create this dataset. Like with `DownloadByRotation.py`:
+The second validation dataset consists of a daily cadence dataset developed for this work. This dataset includes observations starting with CR 2099 and ending with CR 2294. The file `DownloadAtCadence.py` was used to create this dataset. Like with `DownloadByRotation.py`:
 > - User will need to adjust the variables in the `Key Variables` cell (`In[2]`) to point to the correct directories.
 > - User will need to register their email at [http://jsoc.stanford.edu/ajax/register_email.html](http://jsoc.stanford.edu/ajax/register_email.html) and add that email to the appropriate variable in the `Key Variables` cell.
 > - This script can be used to speed up the process of rebuilding the dataset. This is achieved by
 >   1. Creating a temporary subfolder within the `DatasetTools` folder
 >   2. Ensuring that the variable `traceFolder` points to that temporary subfolder
 >   3. Setting the remaining variables in the `Key Variables` cell to ensure the correct CR is downloaded and saved where the user wishes
->   4. Running `DownloadByRotation.py`
+>   4. Running \[`DownloadAtCadence.py`\]
 >   5. Deleting the temporary subfolder
 >   6. Running `RebuildDataset.py`...to download any missing files
 
 Please note: in order to use `RebuildDataset.py` to rebuild the daily cadence dataset the following lines must be changed:
+
 - Line 32: Replace `traceFolder = 'DownloadLists/'`  with `traceFolder = 'DailyCadenceDownloadLists/'`.
 - Line 67: Replace `    for key in keys[2:]:` with `    for key in keys[3:]:`.
 
 We note here that the following code has been added to validate the datasets:
+
 - `GapCheck2.py` reports the largest temporal gap that exits between observations. This new formulation will cycle through all CRs in the dataset, reporting the largest gap in each CR.
-- `HMIgap.py` report the largest time gap that exits between the HMI observation and the AIA data it has been paired with. Like with `GapCheck2.py`, this code will cycle thorugh all CRs in the dataset, reporting the largest temporal gap in each CR.
+- `HMIgap.py` report the largest time gap that exits between the HMI observation and the AIA data it has been paired with. Like with `GapCheck2.py`, this code will cycle through all CRs in the dataset, reporting the largest temporal gap in each CR.
 
 ## General Tools
 The folder `ACWE_python_fall_2023` contains updated versions of the functions used to generate segmentations, both with and without HMI magnetogram data, and for saving the resulting segmentations. The following scripts are identical between this code and [CH-ACWE](https://github.com/DuckDuckPig/CH-ACWE), as such the instructions from the [CH-ACWE](https://github.com/DuckDuckPig/CH-ACWE) `README` file are reproduced below:
@@ -76,9 +78,11 @@ The folder `ACWE_python_fall_2023` contains updated versions of the functions us
 >   - Both functions work for both single segmentations and for confidence maps.
 
 The folder `ACWE_python_fall_2023` also contains:
+
 - `acweUniFunctions_v1.py`: A version of `acweFunctions_v6.py` that accepts vector-valued data and also allows the user to evolve the contour to maximize the unipolarity of the underlying region, as observed in the magnetic field.
 
 In addition to this, the folder `ACWE_python_fall_2023/ACWE_python_v3`, which still contains the original ACWE functions, modified to work on python version 3.0 or higher, also includes the following new scripts/versions of ACWE:
+
 - `acwe_exp1.py`: ACWE for vector-valued images
 - `acwe_exp2.py`: ***The final CH-QUACK evolution function.*** This version has an additional pair of forces that evolve the contour to maximize the unipolarity of the underlying region, as observed in the magnetic field
 - `acwe_exp3.py`: This version has an additional pair of forces that evolve the contour to maximize the flux imbalance of the underlying region, as observed in the magnetic field.
@@ -90,6 +94,7 @@ The folder `Metrics` contains tools for comparing segmentations to each other.
 
 ## Generating a QUACK Segmentation
 The file `Standard/runACWEunipolarity.py` Generates a binary CH segmentation according to the final QUACK pipeline. Please note:
+
 - The variables in the `Key Variables` cell (`In[2]`) will need to be adjusted to point to the correct directories.
 - As written, this script assume that the user will be using the 193 angstroms EUV observation and the HMI magnetogram, however this can be changed to take in any combination of EUV and HMI magnetogram data by adjusting the `acweChoices` variable to list all image(s) chosen for the process.
   - The size of the foreground, background, and `alpha` weights must be adjusted to match the number of inputs and order chosen
@@ -98,27 +103,30 @@ The file `Standard/runACWEunipolarity.py` Generates a binary CH segmentation acc
 - As written, this code will perform 50 EUV-only iterations of ACWE to enlarge regions of the initial seed in order to filter out filament regions. The number of EUV-only iterations can be changed by adjusting the variable `switch` located in the `Key Variable` cell.
 - Like the scripts in [CH-ACWE](https://github.com/DuckDuckPig/CH-ACWE): "The script will assume that the data are organized by CR, with a sub directory for each record time in the `.csv` file in the `DownloadLists` subfolder within the `DatasetTools` directory. Both `DownloadByRotation.py` and `RebuildDataset.py` will organize the dataset appropriately."
 
-The file `Extensions/ISWAT/Standard/runACWEunipolarityISWAT.py` is a version of `Standard/runACWEunipolarity.py` that has been modified to accpet the preprocessed `.save` files provide by [Reiss et al. (2024)](https://doi.org/10.3847/1538-4365/ad1408). Please note:
+The file `Extensions/ISWAT/Standard/runACWEunipolarityISWAT.py` is a version of `Standard/runACWEunipolarity.py` that has been modified to accept the preprocessed `.save` files provide by [Reiss et al. (2024)](https://doi.org/10.3847/1538-4365/ad1408). Please note:
+
 - The variables in the `Key Variables` cell (`In[2]`) will need to be adjusted to point to the correct directories.
 - As written, this code will perform 50 EUV-only iterations of ACWE to enlarge regions of the initial seed in order to filter out filament regions. The number of EUV-only iterations can be changed by adjusting the variable `switch` located in the `Key Variable` cell.
 
 ## Analyzing Final Pipeline
 ### `Standard/Analysis`
-This folder contains the following tools for analzing the daily cadence dataset:
-- `AnalyseDailyCadenceData.py`: Calculate the total area in Mm<sup>2</sup> of all regions identifed as CHs. 
-- `HMIscaleMagneticAnalysis.py`: Calculate the area in Mm<sup>2</sup>, the projection-corrected mean magnetic field density, and the projection-corrected mean unsigned magnetic field density for each indiviudal region in each segmentation. This code uses the Level 1 HMI data, repojecting the segmentation to allign with HMI data.
-- `MagneticAnalysis.py`: Calculate the area in Mm<sup>2</sup>, the projection-corrected mean magnetic field density, and the projection-corrected mean unsigned magnetic field density for each indiviudal region in each segmentation. This code uses the Level 1.5 HMI data, which has been repojected to match the scale and orientation of the segmentations.
-- `Plot Date Data.ipynb`: Display the total area of each segmenation in Mm<sup>2</sup> and pixels as well as a rolling average of area for a user-specifed size.
-  - Reqires the output of `AnalyseDailyCadenceData.py`
-  - User can change the window size for the rolling average by adjusting the varible `window` in `In[6]`.
+This folder contains the following tools for analyzing the daily cadence dataset:
+
+- `AnalyseDailyCadenceData.py`: Calculate the total area in Mm<sup>2</sup> of all regions identified as CHs. 
+- `HMIscaleMagneticAnalysis.py`: Calculate the area in Mm<sup>2</sup>, the projection-corrected mean magnetic field density, and the projection-corrected mean unsigned magnetic field density for each individual region in each segmentation. This code uses the Level 1 HMI data, reprojecting the segmentation to align with HMI data.
+- `MagneticAnalysis.py`: Calculate the area in Mm<sup>2</sup>, the projection-corrected mean magnetic field density, and the projection-corrected mean unsigned magnetic field density for each individual region in each segmentation. This code uses the Level 1.5 HMI data, which has been reprojected to match the scale and orientation of the segmentations.
+- `Plot Date Data.ipynb`: Display the total area of each segmentation in Mm<sup>2</sup> and pixels as well as a rolling average of area for a user-specified size.
+  - Requires the output of `AnalyseDailyCadenceData.py`
+  - User can change the window size for the rolling average by adjusting the variable `window` in `In[6]`.
 - `Plot Mag Data-MethodComparison.ipynb`: Plot a comparison between the output of `HMIscaleMagneticAnalysis.py` and `MagneticAnalysis.py`.
-- `Plot Mag Data.ipynb`: Plot the output of `MagneticAnalysis.py`, including the total number of CHs identified in each segmentation, and a rolling average of for a user-specifed window size.
-  - User can change the window size for the rolling average by adjusting the varible `window` in `In[9]`.
+- `Plot Mag Data.ipynb`: Plot the output of `MagneticAnalysis.py`, including the total number of CHs identified in each segmentation, and a rolling average of for a user-specified window size.
+  - User can change the window size for the rolling average by adjusting the variable `window` in `In[9]`.
 
 ### `FinalPipeline/Extensions/ISWAT/Standard/Analysis`
-Evaulate the new QUACK pipeline on the dataset from [Reiss et al. (2024)](https://doi.org/10.3847/1538-4365/ad1408).
+Evaluate the new QUACK pipeline on the dataset from [Reiss et al. (2024)](https://doi.org/10.3847/1538-4365/ad1408).
+
 - `Comparison With ACWE.ipynb`: Display side-by-side comparison between QUACK and the original ACWE segmentations.
-- `Visualize Special Case.ipynb`: Display side-by-side comparison between QUACK and the original ACWE segmentations, providing addititinal information about the area of filament regions in both pixels, and Mm<sup>2</sup>, provided that the user specifies which regions are filaments.
+- `Visualize Special Case.ipynb`: Display side-by-side comparison between QUACK and the original ACWE segmentations, providing additional information about the area of filament regions in both pixels, and Mm<sup>2</sup>, provided that the user specifies which regions are filaments.
 
 ### Additional Tools
 The file `FinalPipeline/Standard/SanityCheck.py` was used to verify that `FinalPipeline/Standard/runACWEunipolarity.py` operates correctly by comparing it to `HMI_Experiments/TestSeedingMethods/runACWEmixProcessUnipolarity.py`
