@@ -102,5 +102,23 @@ The file `Extensions/ISWAT/Standard/runACWEunipolarityISWAT.py` is a version of 
 - The variables in the `Key Variables` cell (`In[2]`) will need to be adjusted to point to the correct directories.
 - As written, this code will perform 50 EUV-only iterations of ACWE to enlarge regions of the initial seed in order to filter out filament regions. The number of EUV-only iterations can be changed by adjusting the variable `switch` located in the `Key Variable` cell.
 
-## Additional Tools
+## Analyzing Final Pipeline
+### `Standard/Analysis`
+This folder contains the following tools for analzing the daily cadence dataset:
+- `AnalyseDailyCadenceData.py`: Calculate the total area in Mm<sup>2</sup> of all regions identifed as CHs. 
+- `HMIscaleMagneticAnalysis.py`: Calculate the area in Mm<sup>2</sup>, the projection-corrected mean magnetic field density, and the projection-corrected mean unsigned magnetic field density for each indiviudal region in each segmentation. This code uses the Level 1 HMI data, repojecting the segmentation to allign with HMI data.
+- `MagneticAnalysis.py`: Calculate the area in Mm<sup>2</sup>, the projection-corrected mean magnetic field density, and the projection-corrected mean unsigned magnetic field density for each indiviudal region in each segmentation. This code uses the Level 1.5 HMI data, which has been repojected to match the scale and orientation of the segmentations.
+- `Plot Date Data.ipynb`: Display the total area of each segmenation in Mm<sup>2</sup> and pixels as well as a rolling average of area for a user-specifed size.
+  - Reqires the output of `AnalyseDailyCadenceData.py`
+  - User can change the window size for the rolling average by adjusting the varible `window` in `In[6]`.
+- `Plot Mag Data-MethodComparison.ipynb`: Plot a comparison between the output of `HMIscaleMagneticAnalysis.py` and `MagneticAnalysis.py`.
+- `Plot Mag Data.ipynb`: Plot the output of `MagneticAnalysis.py`, including the total number of CHs identified in each segmentation, and a rolling average of for a user-specifed window size.
+  - User can change the window size for the rolling average by adjusting the varible `window` in `In[9]`.
+
+### `FinalPipeline/Extensions/ISWAT/Standard/Analysis`
+Evaulate the new QUACK pipeline on the dataset from [Reiss et al. (2024)](https://doi.org/10.3847/1538-4365/ad1408).
+- `Comparison With ACWE.ipynb`: Display side-by-side comparison between QUACK and the original ACWE segmentations.
+- `Visualize Special Case.ipynb`: Display side-by-side comparison between QUACK and the original ACWE segmentations, providing addititinal information about the area of filament regions in both pixels, and Mm<sup>2</sup>, provided that the user specifies which regions are filaments.
+
+### Additional Tools
 The file `FinalPipeline/Standard/SanityCheck.py` was used to verify that `FinalPipeline/Standard/runACWEunipolarity.py` operates correctly by comparing it to `HMI_Experiments/TestSeedingMethods/runACWEmixProcessUnipolarity.py`
