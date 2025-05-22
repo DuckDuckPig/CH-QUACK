@@ -9,10 +9,11 @@ This updated environment file specifies the packages necessary to run this code.
   - None of the tools in the `ACWE_python_fall_2023` folder need to be updated
   - None of the tools in `Metrics` folder need to be updated
   - The code `DatasetTools/DataManagmentTools.py` does not need to be updated
-- The folder `FinalPipeline` is a copy of this repository that only contains the tools for developing a segmentation according to the final EUV+HMI magnetogram segmentation process. Users interested in only the final segmentation process will find a self-contained version of the code, with updated functions to facilitate easier segmentations there.
+- The folder `FinalPipeline` is a copy of this repository that only contains the tools for developing a segmentation according to the final EUV+HMI magnetogram segmentation process and the datasets used for validation of that process. Users interested in only the final segmentation process will find a self-contained version of the code, with updated functions to facilitate easier segmentations there.
 
 ## Downloading the dataset
-The dataset used for this project is identical to the one from [CH-ACWE](https://github.com/DuckDuckPig/CH-ACWE). The code from that repository responsible for the download process is reproduced in the the `DatasetTools` folder. The instructions from the [CH-ACWE](https://github.com/DuckDuckPig/CH-ACWE) `README` file are reproduced below:
+### Primary Dataset
+The Primary dataset used for this project is identical to the one from [CH-ACWE](https://github.com/DuckDuckPig/CH-ACWE). The code from that repository responsible for the download process is reproduced in the the `DatasetTools` folder. The instructions from the [CH-ACWE](https://github.com/DuckDuckPig/CH-ACWE) `README` file are reproduced below:
 
 > - `DownloadLists`: This folder contains an organized lists of the dataset. These lists are organized into four `.csv` files, one for each Carrington Rotation (CR).
 > - `Carrington Rotation Start Dates.csv`: This file is a list of the start dates for each Carrington Rotation from CR -10 through CR 2300. This file is used by `DownloadByRotation.py` for both downloading and organizing the dataset.
@@ -33,6 +34,9 @@ The dataset used for this project is identical to the one from [CH-ACWE](https:/
 >     5. Deleting the temporary subfolder
 >     6. Running `RebuildDataset.py` with `traceFolder = 'DownloadLists/'` to download any missing files
 > - `GapCheck.py`: Inform the user as to the largest hour gap between entries in the specified CR within the dataset.
+
+### Secondary Datasets
+Information related to the two dataset used to validate the final pipeline is located in the `FinalPipeline` folder.
 
 ## General Tools
 The folder `ACWE_python_fall_2023` contains updated versions of the functions used to generate segmentations, both with and without HMI magnetogram data, and for saving the resulting segmentations. The following scripts are identical between this code and [CH-ACWE](https://github.com/DuckDuckPig/CH-ACWE), as such the instructions from the [CH-ACWE](https://github.com/DuckDuckPig/CH-ACWE) `README` file are reproduced below:
